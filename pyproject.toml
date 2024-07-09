@@ -1,0 +1,40 @@
+[project]
+name = "pdm-template"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "Alex Wine", email = "alex.wine@truebuiltsoftware.com"},
+]
+dependencies = []
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[tool.pdm]
+distribution = false
+plugins = [
+    "sync-pre-commit-lock"
+]
+
+[tool.pdm.dev-dependencies]
+test = [
+    "pytest>=8.2.2",
+]
+lint = [
+    "basedpyright>=1.13.2",
+    "ruff>=0.5.1",
+]
+workflow = [
+    "pre-commit>=3.7.1",
+]
+
+[tool.sync-pre-commit-lock]
+# Run `pre-commit install` automatically if applicable
+automaticall-install-hooks = true
+# Should we sync your pre-commit versions with your lockfile (when running lock, add, update, remove, etc.)?
+disable-sync-from-lock = false
+# Packages to ignore when syncing from lock
+ignore = []
+# Name of the pre-commit config file to sync with
+pre-commit-config-file = ".pre-commit-config.yaml"
