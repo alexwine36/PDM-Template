@@ -18,7 +18,7 @@ plugins = [
 [tool.pdm.scripts]
 install_dev = "pdm install --plugins"
 test = "pytest"
-coverage = "pytest --cov=src --cov-branch --cov-report xml:coverage.xml tests/"
+coverage = "pytest --cov=src/pdm_template --cov-branch --cov-report xml:coverage.xml tests/"
 lint = "ruff check"
 fmt = "ruff format"
 lint_check = {composite = ["lint", "fmt --check"]}
