@@ -72,7 +72,7 @@ jobs:
           pdm typecheck
 
   Coverage:
-    needs: Testing
+    needs: define-matrix
     runs-on: ${{ fromJSON(needs.define-matrix.outputs.matrix-os)[0] }}
     steps:
       - uses: actions/checkout@v3
