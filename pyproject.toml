@@ -1,10 +1,8 @@
 [project]
 name = "pdm-template"
 version = "0.1.0"
-description = "Default template for PDM package"
-authors = [
-    {name = "Alex Wine", email = "alex.wine@truebuiltsoftware.com"},
-]
+description = "Template for PDM packages"
+authors = []
 dependencies = []
 requires-python = ">=3.10"
 readme = "README.md"
@@ -17,6 +15,17 @@ plugins = [
     "sync-pre-commit-lock"
 ]
 
+[tool.pdm.scripts]
+install_dev = "pdm install --plugins"
+test = "pytest"
+lint = "ruff check"
+fmt = "ruff format"
+lint_check = {composite = ["lint", "fmt --check"]}
+lint_fix = {composite = ["lint --fix", "fmt"]}
+typecheck = "basedpyright"
+commit = "pdm run cz commit"
+
+
 [tool.pdm.dev-dependencies]
 test = [
     "pytest>=8.2.2",
@@ -27,7 +36,11 @@ lint = [
 ]
 workflow = [
     "pre-commit>=3.7.1",
+    "commitizen>=3.27.0",
 ]
+
+[tool.ruff]
+line-length=120
 
 [tool.sync-pre-commit-lock]
 # Run `pre-commit install` automatically if applicable
@@ -38,3 +51,23 @@ disable-sync-from-lock = false
 ignore = []
 # Name of the pre-commit config file to sync with
 pre-commit-config-file = ".pre-commit-config.yaml"
+
+[tool.basedpyright]
+include = ["src"]
+reportMissingImports = true
+reportAttributeAccessIssue = true
+reportMissingTypeStubs = false
+typeCheckingMode = "basic"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "$version"
+version_scheme = "pep440"
+version_provider = "pep621"
+update_changelog_on_bump = true
+
+[tool.pytest.ini_options]
+pythonpath = [
+  ".", "src"
+]
+addopts = "-s"

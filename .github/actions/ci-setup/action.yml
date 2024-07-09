@@ -1,0 +1,24 @@
+name: CI Setup
+description: Install dependencies PDM
+
+inputs:
+  python-version:
+    description: 'Python version'
+    required: true
+    default: '3.12'
+  
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up PDM
+      uses: pdm-project/setup-pdm@v4
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: true
+        cache-dependency-path: |
+          ./pdm.lock
+    - name: Install dependencies
+      shell: bash
+      run: |
+        pdm sync -d -G :all

@@ -1,0 +1,73 @@
+name: Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  define-matrix:
+    outputs:
+      matrix-os: ${{ steps.os.outputs.matrix-os }}
+      matrix-python-version: ${{ steps.python-version.outputs.matrix-python-version }} 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up OS matrix
+        id: os
+        run: echo 'matrix-os=["ubuntu-latest"]' >> "$GITHUB_OUTPUT"
+      - name: Set up matrix
+        id: python-version
+        run: echo 'matrix-python-version=["3.12"]' >> "$GITHUB_OUTPUT"
+
+      - name: Print env variable
+        run: |
+          echo "matrix-python-version: ${{ steps.python-version.outputs.matrix-python-version }}"
+          echo "$GITHUB_OUTPUT"
+  Linting:
+    needs: define-matrix
+    strategy:
+      matrix:
+        python-version: ${{ fromJSON(needs.define-matrix.outputs.matrix-python-version) }}
+        os: ${{ fromJSON(needs.define-matrix.outputs.matrix-os) }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/ci-setup
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run Lint
+        run: |
+          pdm lint_check
+  Testing:
+    needs: define-matrix
+    strategy:
+      matrix:
+        python-version: ${{ fromJSON(needs.define-matrix.outputs.matrix-python-version) }}
+        os: ${{ fromJSON(needs.define-matrix.outputs.matrix-os) }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/ci-setup
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run Tests
+        run: |
+          pdm test -v tests
+
+  Typecheck:
+    needs: define-matrix
+    strategy:
+      matrix:
+        python-version: ${{ fromJSON(needs.define-matrix.outputs.matrix-python-version) }}
+        os: ${{ fromJSON(needs.define-matrix.outputs.matrix-os) }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/ci-setup
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run Typecheck
+        run: |
+          pdm typecheck
+      
