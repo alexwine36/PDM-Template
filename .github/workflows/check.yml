@@ -1,5 +1,8 @@
 name: Check
 
+permissions:
+  pull-requests: write
+
 on:
   push:
     branches:
