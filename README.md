@@ -1,6 +1,11 @@
 # pdm-template
 
 
+## Usage
+```
+pdm init https://github.com/alexwine36/PDM-Template
+```
+
 # Setup
 
 ## Development Environment [PDM](https://pdm-project.org)
