@@ -18,6 +18,7 @@ plugins = [
 [tool.pdm.scripts]
 install_dev = "pdm install --plugins"
 test = "pytest"
+coverage = "pytest --cov=src --cov-branch --cov-report xml:coverage.xml tests/"
 lint = "ruff check"
 fmt = "ruff format"
 lint_check = {composite = ["lint", "fmt --check"]}
@@ -29,6 +30,7 @@ commit = "pdm run cz commit"
 [tool.pdm.dev-dependencies]
 test = [
     "pytest>=8.2.2",
+    "pytest-cov>=5.0.0",
 ]
 lint = [
     "basedpyright>=1.13.2",
@@ -38,6 +40,7 @@ workflow = [
     "pre-commit>=3.7.1",
     "commitizen>=3.27.0",
 ]
+pytest-cov = []
 
 [tool.ruff]
 line-length=120
